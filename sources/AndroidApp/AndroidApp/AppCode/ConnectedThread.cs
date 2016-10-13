@@ -54,11 +54,20 @@ namespace AndroidApp.AppCode
                 try
                 {
                     // Read from the InputStream
-                    bytes = mmInStream.Read(buffer, 0, buffer.Length);
-
+                    do
+                    {
+                        bytes = mmInStream.Read(buffer, 0, buffer.Length);
+                    }
+                    while (bytes != '\n');
+                    var file_name = new Java.IO.File(Android.OS.Environment.GetExternalStoragePublicDirectory(
+                                                    Android.OS.Environment.DirectoryDocuments), 
+                                                    string.Format("{0}.zip", Guid.NewGuid())).AbsolutePath;
+                    using (var fs = new FileStream(file_name, FileMode.Create))
+                    {
+                        mmInStream.CopyTo(fs);
+                    }
                     // Send the obtained bytes to the UI Activity
-                    _service._handler.ObtainMessage((int)MessageState.MESSAGE_READ, bytes, -1, buffer)
-                        .SendToTarget();
+                    //_service._handler.ObtainMessage((int)MessageState.MESSAGE_READ, bytes, -1, buffer).SendToTarget();
                 }
                 catch (Java.IO.IOException e)
                 {
@@ -66,6 +75,10 @@ namespace AndroidApp.AppCode
                     break;
                 }
             }
+        }
+
+        private void WriteFile(byte[] bytes)
+        {
         }
 
         /// <summary>

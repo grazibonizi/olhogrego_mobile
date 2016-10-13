@@ -87,6 +87,9 @@ namespace AndroidApp
 			// aapt resource value: 0x7f050006
 			public const int txtConnectedDevice = 2131034118;
 			
+			// aapt resource value: 0x7f050009
+			public const int txtReceivedData = 2131034121;
+			
 			static Id()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();

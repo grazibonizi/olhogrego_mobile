@@ -7,7 +7,7 @@
         android:id="@+id/MyButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/Hello" />
+        android:text="Conectar ao dispositivo" />
     <TextView
         android:id="@+id/txtConnectedDevice"
         android:layout_width="match_parent"
@@ -19,10 +19,17 @@
         android:id="@+id/btnIniciar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Iniciar" />
+        android:text="Iniciar gravação" />
     <Button
         android:id="@+id/btnFinalizar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Interromper" />
+        android:text="Finalizar gravação" />
+    <TextView
+        android:id="@+id/txtReceivedData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#666"
+        android:textColor="#fff"
+        android:paddingLeft="5dp" />
 </LinearLayout>

@@ -28,6 +28,7 @@ namespace AndroidApp
         private BluetoothAdapter bluetoothAdapter = null;
 
         private TextView txtConnectedDevice;
+        private TextView txtReceivedData;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -55,11 +56,13 @@ namespace AndroidApp
 
             Button btnIniciar = FindViewById<Button>(Resource.Id.btnIniciar);
             Button btnFinalizar = FindViewById<Button>(Resource.Id.btnFinalizar);
+            txtReceivedData = FindViewById<TextView>(Resource.Id.txtReceivedData);
 
             btnIniciar.Click += BtnIniciar_Click;
             btnFinalizar.Click += BtnFinalizar_Click;
 
             StartCommunicationService();
+
         }
 
         private void StartCommunicationService()

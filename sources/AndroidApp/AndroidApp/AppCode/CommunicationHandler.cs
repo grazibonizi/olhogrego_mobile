@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using System.IO;
 
 namespace AndroidApp.AppCode
 {
@@ -47,6 +48,7 @@ namespace AndroidApp.AppCode
                     break;
                 case MessageState.MESSAGE_READ:
                     //byte[] readBuf = (byte[])msg.Obj;
+                    //WriteFile(readBuf);
                     // construct a string from the valid bytes in the buffer
                     //var readMessage = new Java.Lang.String(readBuf, 0, msg.Arg1);
                     //bluetoothChat.conversationArrayAdapter.Add(bluetoothChat.connectedDeviceName + ":  " + readMessage);
@@ -60,6 +62,13 @@ namespace AndroidApp.AppCode
                     //Toast.MakeText(Application.Context, msg.Data.GetString(CommunicationService.TOAST), ToastLength.Short).Show();
                     break;
             }
+        }
+
+        private void WriteFile(byte[] bytes)
+        {
+            var app_folder = new Java.IO.File(Android.OS.Environment.GetExternalStoragePublicDirectory(
+                                            Android.OS.Environment.DirectoryDocuments), "olhogrego.zip");
+            File.WriteAllBytes(app_folder.AbsolutePath, bytes);
         }
     }
 }
