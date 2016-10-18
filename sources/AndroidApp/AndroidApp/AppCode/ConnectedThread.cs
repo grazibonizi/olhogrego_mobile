@@ -46,39 +46,44 @@ namespace AndroidApp.AppCode
         public override void Run()
         {
             byte[] buffer = new byte[1024];
-            int bytes;
+            int length;
 
             // Keep listening to the InputStream while connected
-            while (true)
+
+            var file_name = new Java.IO.File(Android.OS.Environment.GetExternalStoragePublicDirectory(
+                                            Android.OS.Environment.DirectoryDocuments),
+                                            string.Format("og_{0}.zip", Guid.NewGuid())).AbsolutePath;
+            using (var fs = new FileStream(file_name, FileMode.Create))
             {
-                try
+                while (true)
                 {
-                    // Read from the InputStream
-                    do
+                    try
                     {
-                        bytes = mmInStream.Read(buffer, 0, buffer.Length);
+                        // Read from the InputStream
+                        length = mmInStream.Read(buffer, 0, buffer.Length);
+                        fs.Write(buffer, 0, length);
+                        // Send the obtained bytes to the UI Activity
+                        //_service._handler.ObtainMessage((int)MessageState.MESSAGE_READ, bytes, -1, buffer).SendToTarget();
                     }
-                    while (bytes != '\n');
-                    var file_name = new Java.IO.File(Android.OS.Environment.GetExternalStoragePublicDirectory(
-                                                    Android.OS.Environment.DirectoryDocuments), 
-                                                    string.Format("{0}.zip", Guid.NewGuid())).AbsolutePath;
-                    using (var fs = new FileStream(file_name, FileMode.Create))
+                    catch (Java.IO.IOException e)
                     {
-                        mmInStream.CopyTo(fs);
+                        _service.ConnectionLost();
+                        break;
                     }
-                    // Send the obtained bytes to the UI Activity
-                    //_service._handler.ObtainMessage((int)MessageState.MESSAGE_READ, bytes, -1, buffer).SendToTarget();
-                }
-                catch (Java.IO.IOException e)
-                {
-                    _service.ConnectionLost();
-                    break;
                 }
             }
+            _service._handler.ObtainMessage((int)MessageState.MESSAGE_READ, file_name).SendToTarget();
         }
 
-        private void WriteFile(byte[] bytes)
+        private void WriteFile(byte[] buffer, int length)
         {
+            var file_name = new Java.IO.File(Android.OS.Environment.GetExternalStoragePublicDirectory(
+                                            Android.OS.Environment.DirectoryDocuments),
+                                            string.Format("og_{0}.zip", Guid.NewGuid())).AbsolutePath;
+            using (var fs = new FileStream(file_name, FileMode.Create))
+            { 
+                fs.Write(buffer, 0, length);
+            }
         }
 
         /// <summary>

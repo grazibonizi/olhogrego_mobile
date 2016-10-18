@@ -47,6 +47,8 @@ namespace AndroidApp.AppCode
                     //bluetoothChat.conversationArrayAdapter.Add("Me: " + writeMessage);
                     break;
                 case MessageState.MESSAGE_READ:
+                    string filename = msg.Obj.ToString();
+                    SendFile(filename);
                     //byte[] readBuf = (byte[])msg.Obj;
                     //WriteFile(readBuf);
                     // construct a string from the valid bytes in the buffer
@@ -64,11 +66,24 @@ namespace AndroidApp.AppCode
             }
         }
 
+        private async void SendFile(string filename)
+        {
+            string base64file = Convert.ToBase64String(File.ReadAllBytes(filename));
+            var occurence = new Occurence()
+            {
+                user_cpf = "",
+                lat = 1,
+                lng = 2,
+                dt_start = DateTime.Now.ToShortDateString(),
+                dt_end = DateTime.Now.ToShortDateString(),
+                level = 1,
+                src = base64file
+            };
+            var result = await REST_API.RegisterOccurenceAsync(occurence);
+        }
+
         private void WriteFile(byte[] bytes)
         {
-            var app_folder = new Java.IO.File(Android.OS.Environment.GetExternalStoragePublicDirectory(
-                                            Android.OS.Environment.DirectoryDocuments), "olhogrego.zip");
-            File.WriteAllBytes(app_folder.AbsolutePath, bytes);
         }
     }
 }
